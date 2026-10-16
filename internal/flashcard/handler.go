@@ -62,7 +62,10 @@ func GetFlashcardsHandler(w http.ResponseWriter, r *http.Request) {
 func GetRandomFlashcardHandler(w http.ResponseWriter, r *http.Request) {
 	flashcard := Flashcards[rand.IntN(len(Flashcards))]
 
-	slog.Info("GET v1/random_flashcard", slog.String("remote_addr", r.RemoteAddr))
+	slog.Info("GET v1/random_flashcard",
+		slog.String("flashcard_id", flashcard.ID),
+		slog.String("remote_addr", r.RemoteAddr))
+
 	util.WriteJson(w, 200, util.Response{
 		Ok:   true,
 		Data: flashcard,
