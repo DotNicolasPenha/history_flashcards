@@ -25,6 +25,7 @@ func main() {
 
 	mux.HandleFunc("GET /v1/random_flashcard", handlers.GetRandomHandler)
 	mux.HandleFunc("/", util.NotFoundHandler)
+	mux.HandleFunc("/health", util.HealthHandler)
 
 	slog.Info("Server initialized.", slog.String("PORT", port))
 

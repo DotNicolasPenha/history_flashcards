@@ -17,6 +17,14 @@ func NotFoundHandler(w http.ResponseWriter, r *http.Request) {
 		Error: errors.New("Path not found.").Error(),
 	})
 }
+func HealthHandler(w http.ResponseWriter, r *http.Request) {
+	slog.Info("Health checked.", slog.String("remote_addr", r.RemoteAddr))
+
+	WriteJson(w, 200, Response{
+		Ok:   true,
+		Data: struct{ check_health bool }{check_health: true},
+	})
+}
 
 func WriteJson(w http.ResponseWriter, status int, v any) {
 	w.Header().Set("Content-Type", "application/json")
