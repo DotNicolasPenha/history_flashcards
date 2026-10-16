@@ -4,6 +4,7 @@ import (
 	"log/slog"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/dotnicolaspenha/historyflashcards/internal/flashcard"
 	"github.com/dotnicolaspenha/historyflashcards/internal/util"
@@ -15,6 +16,10 @@ func main() {
 
 	if port == "" {
 		port = ":8080"
+	}
+
+	if !strings.HasPrefix(port, ":") {
+		port = ":" + port
 	}
 
 	repository := flashcard.NewMemoryFlashCardStore() // memory
