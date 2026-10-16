@@ -2,6 +2,7 @@ package flashcard
 
 import (
 	"errors"
+	"log/slog"
 	"math/rand/v2"
 	"net/http"
 
@@ -61,6 +62,7 @@ func GetFlashcardsHandler(w http.ResponseWriter, r *http.Request) {
 func GetRandomFlashcardHandler(w http.ResponseWriter, r *http.Request) {
 	flashcard := Flashcards[rand.IntN(len(Flashcards))]
 
+	slog.Info("GET v1/random_flashcard", slog.String("remote_addr", r.RemoteAddr))
 	util.WriteJson(w, 200, util.Response{
 		Ok:   true,
 		Data: flashcard,
