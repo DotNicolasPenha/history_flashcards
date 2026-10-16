@@ -1,7 +1,6 @@
 package main
 
 import (
-	"errors"
 	"log/slog"
 	"net/http"
 	"os"
@@ -12,23 +11,20 @@ import (
 )
 
 func main() {
-	port := ":8080"
+	port := os.Getenv("PORT")
+
+	if port == "" {
+		port = ":8080"
+	}
+
+	repository := flashcard.NewMemoryFlashCardStore() // memory
+	service := flashcard.NewFlashCardService(repository)
+	handlers := flashcard.NewFlashCardHandler(service)
+
 	mux := http.NewServeMux()
 
-	// mux.HandleFunc("GET /v1/flashcards", flashcard.GetFlashcardsHandler)
-	// mux.HandleFunc("GET /v1/flashcard/{id}", flashcard.GetOneFlashcardByIdHandler)
-	mux.HandleFunc("GET /v1/random_flashcard", flashcard.GetRandomFlashcardHandler)
-
-	mux.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		slog.Warn("Path not found.",
-			slog.String("path", r.URL.Path),
-			slog.String("remote_addr", r.RemoteAddr))
-
-		util.WriteJson(w, 404, util.Response{
-			Ok:    false,
-			Error: errors.New("Path not found.").Error(),
-		})
-	})
+	mux.HandleFunc("GET /v1/random_flashcard", handlers.GetRandomHandler)
+	mux.HandleFunc("/", util.NotFoundHandler)
 
 	slog.Info("Server initialized.", slog.String("PORT", port))
 

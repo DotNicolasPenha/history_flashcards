@@ -7,8 +7,6 @@ type Flashcard struct {
 	QuestionResponse string `json:"question_response"`
 }
 
-type FlashcardStore interface{
-	GetAll() ([]Flashcard, error)
-	GetRandom() (Flashcard, error)
-	GetOneByID(id string) (Flashcard,error)
+type FlashCardStore interface {
+	GetRandom() (*Flashcard, error)
 }
